@@ -31,7 +31,7 @@
     "build": "run-s build:source build:declaration",
     "build:declaration": "cp src/global.d.ts dist/",
     "build:source": "tsc -p tsconfig.json --outDir dist",
-    "ci": "run-s lint test build",
+    "ci": "run-s test build lint",
     "lint": "eslint . --ext .ts,.tsx && tsc --noEmit -p __tests__",
     "test": "vitest --run --coverage",
     "watch": "tsc -w"
