@@ -7,10 +7,6 @@ export interface BaseStructureProps {
   Title?: ComponentType<Pick<TitleProps, 'title' | 'desc'>>;
   Item: ComponentType<BaseItemProps>;
   data: Data;
-  design?: {
-    title?: TitleProps;
-    item?: BaseItemProps;
-  };
 }
 
 export interface Structure {

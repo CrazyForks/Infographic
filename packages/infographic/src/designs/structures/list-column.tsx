@@ -10,14 +10,12 @@ export interface ListColumnProps extends BaseStructureProps {
 }
 
 export const ListColumn: ComponentType<ListColumnProps> = (props) => {
-  const { Title, Item, data, gap = 20, design } = props;
+  const { Title, Item, data, gap = 20 } = props;
   const { title, desc, items = [] } = data;
 
   let width = 720;
 
-  const titleContent = Title ? (
-    <Title title={title} desc={desc} {...design?.title} />
-  ) : null;
+  const titleContent = Title ? <Title title={title} desc={desc} /> : null;
   if (Title) {
     const titleBounds = getElementBounds(titleContent);
     width = titleBounds.width * 0.8;
@@ -42,7 +40,6 @@ export const ListColumn: ComponentType<ListColumnProps> = (props) => {
         y={itemY}
         width={width}
         positionV="center"
-        {...design?.item}
       />,
     );
 
