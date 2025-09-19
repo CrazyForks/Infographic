@@ -1,4 +1,5 @@
-import { ComponentType } from '@antv/infographic-jsx';
+import type { ComponentType } from '@antv/infographic-jsx';
+import type { ThemeColors } from '../../themes';
 import type { Data } from '../../types';
 
 export interface BaseItemProps {
@@ -9,7 +10,7 @@ export interface BaseItemProps {
   indexes: number[];
   data: Data;
   datum: Data['items'][number];
-  primaryColor?: string;
+  themeColors: ThemeColors;
   positionH?: 'normal' | 'center' | 'flipped';
   positionV?: 'normal' | 'center' | 'flipped';
   [key: string]: any;

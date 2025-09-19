@@ -7,8 +7,8 @@ import {
   Title,
 } from '../designs';
 import { getPaletteColor } from '../renderer';
-import { getTheme, type ThemeConfig } from '../themes';
-import { parsePadding } from '../utils';
+import { generateThemeColors, getTheme, type ThemeConfig } from '../themes';
+import { isDarkColor, parsePadding } from '../utils';
 import type { InfographicOptions, ParsedInfographicOptions } from './types';
 
 export function parseOptions(
@@ -58,7 +58,7 @@ function parseDesign(
   const { structure, title, item } = config || {};
   return {
     structure: parseDesignStructure(structure),
-    title: parseDesignTitle(title),
+    title: parseDesignTitle(title, options),
     item: parseDesignItem(item, options),
   };
 }
@@ -76,13 +76,18 @@ function parseDesignStructure(
 
 function parseDesignTitle(
   config: TemplateOptions['title'],
+  options: InfographicOptions,
 ): ParsedTemplateOptions['title'] {
   if (!config) throw new Error('Title is required in design or template');
   const { type, ...userProps } = normalizeWithType(config);
+
+  const { themeConfig } = options;
+  const background = themeConfig?.background || '#fff';
+  const themeColors = generateColors(background, background);
   // use default title for now
   return {
     component: (props: Parameters<typeof Title>[0]) =>
-      Title({ ...props, ...userProps }),
+      Title({ ...props, themeColors, ...userProps }),
   };
 }
 
@@ -98,12 +103,16 @@ function parseDesignItem(
   return {
     component: (props) => {
       const { indexes } = props;
-      const primaryColor = getPaletteColor(
-        options.themeConfig?.palette,
-        indexes,
-        options.data?.items?.length,
+      const { data, themeConfig } = options;
+      const background = themeConfig?.background || '#fff';
+
+      const themeColors = generateColors(
+        getPaletteColor(themeConfig?.palette, indexes, data?.items?.length) ||
+          '#1890ff',
+        background,
       );
-      return component({ ...props, primaryColor, ...userProps });
+
+      return component({ ...props, themeColors, ...userProps });
     },
     options: itemOptions,
   };
@@ -115,4 +124,12 @@ function parseTheme(
 ): ThemeConfig {
   const base = theme ? getTheme(theme) || {} : {};
   return { ...base, ...themeConfig };
+}
+
+function generateColors(colorPrimary: string, background: string = '#fff') {
+  return generateThemeColors({
+    colorPrimary,
+    isDarkMode: isDarkColor(background),
+    colorBg: background,
+  });
 }
