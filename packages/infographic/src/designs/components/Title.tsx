@@ -33,7 +33,7 @@ export const Title = (props: TitleProps) => {
       fontSize: 24,
       fill: themeColors.colorPrimaryText,
       width,
-      height: 32,
+      height: desc ? 32 : 64,
       lineHeight: 1.4,
       alignHorizontal,
     };

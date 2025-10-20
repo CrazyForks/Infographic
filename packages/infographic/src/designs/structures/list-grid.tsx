@@ -12,7 +12,7 @@ export interface ListGridProps extends BaseStructureProps {
 }
 
 export const ListGrid: ComponentType<ListGridProps> = (props) => {
-  const { Title, Item, data, columns = 3, gap = 20 } = props;
+  const { Title, Item, data, columns = 3, gap = 24 } = props;
   const { title, desc, items = [] } = data;
 
   const titleContent = Title ? <Title title={title} desc={desc} /> : null;

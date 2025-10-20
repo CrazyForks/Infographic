@@ -7,6 +7,7 @@ import {
   Group,
   Rect,
 } from '@antv/infographic-jsx';
+import { getPaletteColor } from '../../renderer';
 import { ItemsGroup } from '../components';
 import { LinearGradient } from '../defs';
 import { FlexLayout } from '../layouts';
@@ -117,16 +118,26 @@ export const CompareHierarchyLeftRight: ComponentType<
     );
   }
 
-  const addDecoElement = (side: 'left' | 'right', pos: [number, number]) => {
+  const addDecoElement = (
+    side: 'left' | 'right',
+    pos: [number, number],
+    indexes: number[],
+  ) => {
     if (decoration === 'none') return;
     const [x, y] = pos;
+
+    const currentColor = getPaletteColor(
+      options.themeConfig?.palette,
+      indexes,
+      data.items.length,
+    );
     const props: DecorationProps = {
       x,
       y,
       width: itemBounds.width,
       height: itemBounds.height,
       side,
-      color: options.themeConfig.colorPrimary || '#ccc',
+      color: currentColor || '#ccc',
       colorBg: options.themeConfig.colorBg || '#fff',
     };
     if (decoration === 'split-line') {
@@ -166,7 +177,7 @@ export const CompareHierarchyLeftRight: ComponentType<
           positionH={flipLeaf ? 'flipped' : 'normal'}
         />,
       );
-      addDecoElement('left', [leftX, itemY]);
+      addDecoElement('left', [leftX, itemY], [0, index]);
     });
 
     rightItems.forEach((item, index) => {
@@ -192,7 +203,7 @@ export const CompareHierarchyLeftRight: ComponentType<
           positionH={flipLeaf ? 'normal' : 'flipped'}
         />,
       );
-      addDecoElement('right', [rightX, itemY]);
+      addDecoElement('right', [rightX, itemY], [1, index]);
     });
   } else {
     // create left items
@@ -213,7 +224,7 @@ export const CompareHierarchyLeftRight: ComponentType<
           positionH={flipLeaf ? 'flipped' : 'normal'}
         />,
       );
-      addDecoElement('left', [leftX, itemY]);
+      addDecoElement('left', [leftX, itemY], indexes);
     });
 
     // create right items
@@ -234,7 +245,7 @@ export const CompareHierarchyLeftRight: ComponentType<
           positionH={flipLeaf ? 'normal' : 'flipped'}
         />,
       );
-      addDecoElement('right', [rightX, itemY]);
+      addDecoElement('right', [rightX, itemY], indexes);
     });
   }
 
@@ -270,6 +281,7 @@ const SplitLine = (props: DecorationProps) => {
   const { x, y, width, height, color, colorBg, side } = props;
   const lineY = y + height;
   const linearGradientId = `split-line-linear-gradient-${side}`;
+
   return (
     <>
       <Defs>
@@ -293,7 +305,7 @@ const SplitLine = (props: DecorationProps) => {
 
 const DotLine = (props: DecorationProps) => {
   const { x, y, side, width, height, color, colorBg } = props;
-  const radius = 10;
+  const radius = 6;
   const innerRadius = radius / 3;
   const d = radius * 2;
   const innerD = innerRadius * 2;
@@ -339,9 +351,9 @@ const DotLine = (props: DecorationProps) => {
       />
       <Rect
         x={side === 'left' ? cx : cx + dx}
-        y={cy - 1}
+        y={cy - 0.5}
         width={lineLength}
-        height={2}
+        height={1}
         fill={`url(#${linearGradientId})`}
       />
     </Group>

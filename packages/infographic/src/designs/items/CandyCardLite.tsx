@@ -25,8 +25,8 @@ export const CandyCardLite: ComponentType<CandyCardLiteProps> = (props) => {
         y={0}
         width={width}
         height={height}
-        rx={24}
-        ry={24}
+        rx={18}
+        ry={18}
         fill={themeColors.colorPrimaryBg}
         stroke={themeColors.colorPrimary}
       />
@@ -46,7 +46,7 @@ export const CandyCardLite: ComponentType<CandyCardLiteProps> = (props) => {
       <ItemLabel
         indexes={indexes}
         x={20}
-        y={30}
+        y={24}
         width={200}
         alignHorizontal="left"
         alignVertical="center"
@@ -59,7 +59,7 @@ export const CandyCardLite: ComponentType<CandyCardLiteProps> = (props) => {
       <ItemDesc
         indexes={indexes}
         x={20}
-        y={60}
+        y={58}
         width={220}
         height={70}
         fill={themeColors.colorTextSecondary}
@@ -72,10 +72,10 @@ export const CandyCardLite: ComponentType<CandyCardLiteProps> = (props) => {
       {/* 右上角插图区域 */}
       <ItemIcon
         indexes={indexes}
-        x={width - 50}
-        y={5}
-        width={44}
-        height={44}
+        x={width - 48}
+        y={12}
+        width={32}
+        height={32}
         fill={themeColors.colorPrimary}
       />
     </Group>

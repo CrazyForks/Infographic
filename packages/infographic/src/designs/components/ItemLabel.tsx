@@ -11,7 +11,7 @@ export const ItemLabel = ({ indexes, children, ...props }: ItemLabelProps) => {
   const finalProps: TextProps = {
     fontSize: 18,
     fontWeight: 'bold',
-    fill: '#000',
+    fill: '#252525',
     width: 100,
     lineHeight: 1.4,
     children,

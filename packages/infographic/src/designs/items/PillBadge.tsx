@@ -120,8 +120,8 @@ export const PillBadge: ComponentType<PillBadgeProps> = (props) => {
                 ? 'right'
                 : 'left'
           }
-          fontSize={14}
-          fill={themeColors.colorText}
+          fontSize={12}
+          fill={themeColors.colorTextSecondary}
           lineNumber={2}
           wordWrap={true}
         >
