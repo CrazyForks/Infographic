@@ -1,7 +1,7 @@
 /** @jsxImportSource @antv/infographic-jsx */
 import { ComponentType, Group, Path } from '@antv/infographic-jsx';
 import { ItemLabel } from '../components';
-import { getItemId, getItemProps } from '../utils';
+import { getItemProps } from '../utils';
 import { registerItem } from './registry';
 import type { BaseItemProps } from './types';
 
@@ -22,7 +22,7 @@ export const DoneList: ComponentType<DoneListProps> = (props) => {
       iconSize = 30,
       gap = 5,
       positionH = 'normal',
-      positionV = 'center',
+      positionV = 'middle',
       themeColors,
     },
     restProps,
@@ -31,16 +31,15 @@ export const DoneList: ComponentType<DoneListProps> = (props) => {
   const textWidth = width - iconSize - gap;
 
   const shapeY =
-    positionV === 'center'
+    positionV === 'middle'
       ? (height - iconSize) / 2
       : positionV === 'flipped'
         ? height - iconSize
         : 0;
-
   return (
     <Group {...restProps}>
       <Path
-        id={getItemId(indexes, 'shape', 'done-icon')}
+        data-element-type="shape"
         x={positionH === 'flipped' ? textWidth + gap : 0}
         y={shapeY}
         fill={themeColors.colorPrimary}
@@ -54,7 +53,7 @@ export const DoneList: ComponentType<DoneListProps> = (props) => {
         width={textWidth}
         height={height}
         fontWeight="normal"
-        alignVertical="center"
+        alignVertical="middle"
         wordWrap={false}
         fill="#666"
       >

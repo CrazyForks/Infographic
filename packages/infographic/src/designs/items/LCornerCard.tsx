@@ -69,6 +69,7 @@ export const LCornerCard: ComponentType<LCornerCardProps> = (props) => {
         opacity={0.9}
         width={arrowSize}
         height={arrowSize}
+        data-element-type="shape"
       />
 
       <Path
@@ -76,6 +77,7 @@ export const LCornerCard: ComponentType<LCornerCardProps> = (props) => {
         stroke={themeColors.colorPrimary}
         strokeWidth={lStroke}
         fill="none"
+        data-element-type="shape"
       />
 
       <ItemIcon
@@ -94,7 +96,7 @@ export const LCornerCard: ComponentType<LCornerCardProps> = (props) => {
         fontSize={14}
         fontWeight="bold"
         alignHorizontal="center"
-        alignVertical="center"
+        alignVertical="middle"
         fill={themeColors.colorText}
       >
         {label}

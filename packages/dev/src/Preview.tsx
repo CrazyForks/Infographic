@@ -1,4 +1,4 @@
-import { getTemplate, getTemplates } from '@antv/infographic';
+import { getTemplate, getTemplates, ThemeConfig } from '@antv/infographic';
 import Editor from '@monaco-editor/react';
 import { Card, Checkbox, ColorPicker, Form, Select } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
@@ -49,11 +49,16 @@ export const Preview = () => {
 
   const [template, setTemplate] = useState(initialTemplate);
   const [data, setData] = useState<keyof typeof DATA>(initialData);
-  const [theme, setTheme] = useState<'light' | 'dark'>(initialTheme);
+  const [theme, setTheme] = useState<string>(initialTheme);
   const [colorPrimary, setColorPrimary] = useState(initialColorPrimary);
   const [enablePalette, setEnablePalette] = useState(initialEnablePalette);
-  const [themeConfig, setThemeConfig] = useState<any>(() => {
-    const config: any = {
+  const [customData, setCustomData] = useState<string>(() =>
+    JSON.stringify(DATA[initialData].value, null, 2),
+  );
+  const [dataError, setDataError] = useState<string>('');
+
+  const [themeConfig, setThemeConfig] = useState<ThemeConfig>(() => {
+    const config: ThemeConfig = {
       colorPrimary: initialColorPrimary,
     };
     if (initialTheme === 'dark') {
@@ -104,6 +109,24 @@ export const Preview = () => {
       setData('list');
     }
   }, [template]);
+
+  // Update custom data when data type changes
+  useEffect(() => {
+    setCustomData(JSON.stringify(DATA[data].value, null, 2));
+    setDataError('');
+  }, [data]);
+
+  // Parse custom data
+  const parsedData = useMemo(() => {
+    try {
+      const parsed = JSON.parse(customData);
+      setDataError('');
+      return parsed;
+    } catch (error) {
+      setDataError(error instanceof Error ? error.message : 'Invalid JSON');
+      return DATA[data].value;
+    }
+  }, [customData, data]);
 
   // 键盘导航：上下或左右方向键切换模板
   useEffect(() => {
@@ -191,13 +214,10 @@ export const Preview = () => {
                   options={[
                     { label: '亮色', value: 'light' },
                     { label: '暗色', value: 'dark' },
+                    { label: '手绘风格', value: 'hand-drawn' },
                   ]}
-                  onChange={(newTheme: 'light' | 'dark') => {
+                  onChange={(newTheme: string) => {
                     setTheme(newTheme);
-                    setThemeConfig((pre) => ({
-                      ...pre,
-                      colorBg: newTheme === 'dark' ? '#333' : '#fff',
-                    }));
                   }}
                 />
               </Form.Item>
@@ -214,7 +234,7 @@ export const Preview = () => {
                   }}
                 />
               </Form.Item>
-              <Form.Item label="色板">
+              <Form.Item>
                 <Checkbox
                   checked={enablePalette}
                   onChange={(e) => {
@@ -246,6 +266,38 @@ export const Preview = () => {
             </Form>
           </Card>
 
+          <Card
+            title="数据编辑器"
+            size="small"
+            extra={
+              dataError && (
+                <span style={{ color: '#ff4d4f', fontSize: 12 }}>
+                  {dataError}
+                </span>
+              )
+            }
+          >
+            <div style={{ height: 300 }}>
+              <Editor
+                height="100%"
+                defaultLanguage="json"
+                value={customData}
+                theme="vs-dark"
+                options={{
+                  minimap: { enabled: false },
+                  fontSize: 12,
+                  lineNumbers: 'on',
+                  scrollBeyondLastLine: false,
+                  wordWrap: 'on',
+                  contextmenu: true,
+                  formatOnPaste: true,
+                  formatOnType: true,
+                }}
+                onChange={(value) => setCustomData(value || '')}
+              />
+            </div>
+          </Card>
+
           <Card title="模板配置" size="small">
             <div style={{ height: 300 }}>
               <Editor
@@ -274,8 +326,9 @@ export const Preview = () => {
           <Infographic
             options={{
               template,
-              data: DATA[data].value,
+              data: parsedData,
               padding: 20,
+              theme,
               themeConfig,
             }}
           />

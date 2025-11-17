@@ -77,6 +77,7 @@ export const BadgeCard: ComponentType<BadgeCardProps> = (props) => {
 
       {/* 背景卡片 */}
       <Rect
+        data-element-type="shape"
         x={0}
         y={0}
         width={width}
@@ -123,7 +124,7 @@ export const BadgeCard: ComponentType<BadgeCardProps> = (props) => {
           indexes={indexes}
           width={contentWidth}
           alignHorizontal={positionH === 'flipped' ? 'right' : 'left'}
-          alignVertical={'center'}
+          alignVertical="middle"
           fontSize={14}
           fill={themeColors.colorText}
         >
@@ -136,7 +137,7 @@ export const BadgeCard: ComponentType<BadgeCardProps> = (props) => {
             indexes={indexes}
             width={contentWidth}
             alignHorizontal={positionH === 'flipped' ? 'right' : 'left'}
-            alignVertical="center"
+            alignVertical="middle"
             fontSize={18}
             lineHeight={1}
             fontWeight="bold"

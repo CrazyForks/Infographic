@@ -12,14 +12,12 @@ export interface BaseItemProps {
   datum: Data['items'][number];
   themeColors: ThemeColors;
   positionH?: 'normal' | 'center' | 'flipped';
-  positionV?: 'normal' | 'center' | 'flipped';
+  positionV?: 'normal' | 'middle' | 'flipped';
   valueFormatter?: (value: number) => string | number;
   [key: string]: any;
 }
 
-export interface ItemOptions extends Partial<BaseItemProps> {
-  coloredArea?: ('icon' | 'label' | 'desc' | 'value')[];
-}
+export interface ItemOptions extends Partial<BaseItemProps> {}
 
 export interface Item<T extends BaseItemProps = BaseItemProps> {
   component: ComponentType<T>;

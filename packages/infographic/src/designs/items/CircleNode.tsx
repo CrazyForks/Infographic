@@ -63,7 +63,12 @@ export const CircleNode: ComponentType<CircleNodeProps> = (props) => {
         </linearGradient>
       </Defs>
 
-      <Ellipse width={size} height={size} fill={`url(#${outerGradientId})`} />
+      <Ellipse
+        width={size}
+        height={size}
+        fill={`url(#${outerGradientId})`}
+        data-element-type="shape"
+      />
 
       <Ellipse
         x={innerCircleOffset}
@@ -73,6 +78,7 @@ export const CircleNode: ComponentType<CircleNodeProps> = (props) => {
         fill={`url(#${innerGradientId})`}
         stroke="#FFFFFF"
         strokeWidth={1}
+        data-element-type="shape"
       />
 
       <ItemLabel
@@ -83,7 +89,7 @@ export const CircleNode: ComponentType<CircleNodeProps> = (props) => {
         height={labelSize}
         lineHeight={1.1}
         alignHorizontal="center"
-        alignVertical="center"
+        alignVertical="middle"
         fill={colorText}
         fontWeight="500"
       >

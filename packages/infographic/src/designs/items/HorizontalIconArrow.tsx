@@ -9,7 +9,13 @@ import {
   Polygon,
   Text,
 } from '@antv/infographic-jsx';
-import { Gap, ItemDesc, ItemIconCircle, ItemLabel } from '../components';
+import {
+  Gap,
+  ItemDesc,
+  ItemIconCircle,
+  ItemLabel,
+  ShapesGroup,
+} from '../components';
 import { FlexLayout } from '../layouts';
 import { AlignLayout } from '../layouts/Align';
 import { getItemProps } from '../utils';
@@ -110,8 +116,8 @@ export const HorizontalIconArrow: ComponentType<HorizontalIconArrowProps> = (
             <Gap height={iconGap} />
           </>
         )}
-        <AlignLayout horizontal="center" vertical="center">
-          <VerticalArrow
+        <AlignLayout horizontal="center" vertical="middle">
+          <HorizontalArrow
             width={width}
             height={arrowHeight}
             fill={themeColors.colorPrimary}
@@ -120,7 +126,7 @@ export const HorizontalIconArrow: ComponentType<HorizontalIconArrowProps> = (
             width={width}
             height={arrowHeight}
             alignHorizontal="center"
-            alignVertical="center"
+            alignVertical="middle"
             fill={themeColors.colorWhite}
             fontWeight="bold"
             fontSize={16}
@@ -150,7 +156,7 @@ export const HorizontalIconArrow: ComponentType<HorizontalIconArrowProps> = (
   );
 };
 
-const VerticalArrow = (
+const HorizontalArrow = (
   props: Partial<Bounds> & { fill: string; size?: number },
 ) => {
   const {
@@ -174,6 +180,7 @@ const VerticalArrow = (
         { x: x + size, y: y + height / 2 },
       ]}
       fill={fill}
+      data-element-type="shape"
     />
   );
 };
@@ -184,7 +191,7 @@ const DotLine = (props: {
   width?: number;
   height?: number;
   fill: string;
-  positionV?: 'normal' | 'center' | 'flipped';
+  positionV?: 'normal' | 'middle' | 'flipped';
 }) => {
   const {
     x = 0,
@@ -199,7 +206,7 @@ const DotLine = (props: {
   const strokeWidth = 2;
   const lineX = r;
   return (
-    <Group x={x} y={y} width={width} height={height}>
+    <ShapesGroup x={x} y={y} width={width} height={height}>
       <Ellipse
         width={width}
         height={width}
@@ -215,7 +222,7 @@ const DotLine = (props: {
         strokeWidth={strokeWidth}
         stroke={fill}
       />
-    </Group>
+    </ShapesGroup>
   );
 };
 

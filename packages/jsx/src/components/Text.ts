@@ -48,7 +48,7 @@ export function Text(props: TextProps): JSXElement {
         : x;
 
   const calculateTextY = () => {
-    if (alignVertical === 'center') return y + height / 2;
+    if (alignVertical === 'middle') return y + height / 2;
     if (alignVertical === 'bottom') return y + height;
 
     const fz = +fontSize;
@@ -64,14 +64,19 @@ export function Text(props: TextProps): JSXElement {
   const textY = calculateTextY();
 
   const getDominantBaseline = () => {
-    if (alignVertical === 'center') return 'central';
+    if (alignVertical === 'middle') return 'central';
     if (alignVertical === 'bottom') return 'baseline';
     return 'baseline';
   };
 
   const textProps = {
+    'data-element-type': 'text',
     ...(textX && { x: textX }),
     ...(textY && { y: textY }),
+    ...(width && { width }),
+    ...(height && { height }),
+    ...(x && { 'data-x': x }),
+    ...(y && { 'data-y': y }),
     fill,
     fontSize,
     textAnchor: TEXT_ANCHOR_MAP[alignHorizontal],
@@ -80,7 +85,6 @@ export function Text(props: TextProps): JSXElement {
     children,
     ...dataAttrs,
     ...restProps,
-    ...(id && { id: `${id}-text` }),
     ...(fontFamily && { fontFamily }),
     ...(fontStyle && { fontStyle }),
     ...(fontWeight && { fontWeight }),
@@ -103,15 +107,24 @@ export function Text(props: TextProps): JSXElement {
   };
 
   const hasBackground = backgroundColor && backgroundColor !== 'none';
+
+  if (!hasBackground) {
+    return {
+      type: 'text',
+      props: {
+        ...containerProps,
+        ...textProps,
+      },
+    };
+  }
+
   const rectProps: RectProps = {
+    'data-element-type': 'shape',
     ...bounds,
     fill: backgroundColor,
-    ...(hasBackground && {
-      fillOpacity: backgroundOpacity,
-      rx: backgroundRadius,
-      ry: backgroundRadius,
-    }),
-    ...(id && { id: `${id}-bounds` }),
+    fillOpacity: backgroundOpacity,
+    rx: backgroundRadius,
+    ry: backgroundRadius,
   };
 
   return {

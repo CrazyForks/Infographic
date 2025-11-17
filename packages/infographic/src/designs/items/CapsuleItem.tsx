@@ -52,7 +52,7 @@ export const CapsuleItem: ComponentType<CapsuleItemProps> = (props) => {
     indexes,
     width: textWidth,
     alignHorizontal: textAlign,
-    alignVertical: 'center',
+    alignVertical: 'middle',
     fontSize: 16,
     fontWeight: '600',
     fill: themeColors.colorWhite,
@@ -101,6 +101,7 @@ export const CapsuleItem: ComponentType<CapsuleItemProps> = (props) => {
         fill={themeColors.colorPrimary}
         rx={borderRadius}
         ry={borderRadius}
+        data-element-type="shape"
       />
 
       {/* Icon - white background with primary color icon */}
@@ -112,6 +113,7 @@ export const CapsuleItem: ComponentType<CapsuleItemProps> = (props) => {
             width={iconSize}
             height={iconSize}
             fillOpacity={0.5}
+            fill={themeColors.colorBg}
             filter="url(#drop-shadow)"
           />
           <ItemIconCircle
