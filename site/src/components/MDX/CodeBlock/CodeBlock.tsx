@@ -5,6 +5,7 @@ import {HighlightStyle} from '@codemirror/language';
 import {highlightTree, tags} from '@lezer/highlight';
 import cn from 'classnames';
 import rangeParser from 'parse-numeric-range';
+import {CodeBlockHeader, useCopyableCode, useLanguageLabel} from './shared';
 
 import {CustomTheme} from '../Sandpack/Themes';
 
@@ -25,9 +26,9 @@ const CodeBlock = function CodeBlock({
   children: {
     props: {className = 'language-js', children: code = '', meta},
   },
+  onLineHover,
   noMargin,
   noShadow,
-  onLineHover,
 }: {
   children: React.ReactNode & {
     props: {
@@ -43,6 +44,8 @@ const CodeBlock = function CodeBlock({
 }) {
   code = code.trimEnd();
   let lang = jsxLang;
+  const languageLabel = useLanguageLabel(className);
+  const {copied, handleCopy} = useCopyableCode(code);
   if (className === 'language-css') {
     lang = cssLang;
   } else if (className === 'language-html') {
@@ -215,12 +218,17 @@ const CodeBlock = function CodeBlock({
       dir="ltr"
       className={cn(
         'sandpack sandpack--codeblock',
-        'rounded-2xl h-full w-full overflow-x-auto flex items-center bg-wash dark:bg-gray-95 shadow-lg',
+        'relative rounded-2xl h-full w-full overflow-x-auto flex flex-col shadow-lg bg-wash dark:bg-gray-95',
         !noMargin && 'my-8',
         noShadow &&
           'shadow-none rounded-2xl overflow-hidden w-full flex bg-transparent'
       )}
       style={{contain: 'content'}}>
+      <CodeBlockHeader
+        languageLabel={languageLabel}
+        copied={copied}
+        onCopy={handleCopy}
+      />
       <div className="sp-wrapper">
         <div className="sp-stack">
           <div className="sp-code-editor">
