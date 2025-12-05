@@ -4,10 +4,14 @@ export const VERSION = pkg.version;
 export * from './designs';
 export { getItemProps, getThemeColors } from './designs/utils';
 export {
+  BrushSelect,
   ClickSelect,
   DblClickEditText,
+  DragElement,
+  HotkeyHistory,
   Interaction,
   SelectHighlight,
+  ZoomWheel,
 } from './editor/interactions';
 export { EditBar, Plugin, ResizeElement } from './editor/plugins';
 export {

@@ -34,8 +34,13 @@ export class Editor implements IEditor {
     const plugin = new PluginManager();
     const interaction = new InteractionManager();
 
-    commander.init({ state });
-    state.init({ emitter, editor: this, commander, data: options.data });
+    commander.init({ state, emitter });
+    state.init({
+      emitter,
+      editor: this,
+      commander,
+      options,
+    });
     plugin.init(
       {
         emitter,
@@ -49,6 +54,7 @@ export class Editor implements IEditor {
       emitter,
       editor: this,
       commander,
+      state,
       interactions: options.interactions,
     });
 

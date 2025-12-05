@@ -47,12 +47,14 @@ export class EditBar extends Plugin implements IPlugin {
     const { emitter } = options;
     emitter.on('selection:change', this.handleSelectionChanged);
     emitter.on('selection:geometrychange', this.handleGeometryChanged);
+    emitter.on('history:change', this.handleHistoryChanged);
   }
 
   destroy() {
     const { emitter } = this;
     emitter.off('selection:change', this.handleSelectionChanged);
     emitter.off('selection:geometrychange', this.handleGeometryChanged);
+    emitter.off('history:change', this.handleHistoryChanged);
     this.container?.remove();
   }
 
@@ -77,6 +79,12 @@ export class EditBar extends Plugin implements IPlugin {
     target: Selection[number];
   }) => {
     if (!this.selection.includes(target) || !this.container) return;
+    this.placeEditBar(this.container, this.selection);
+    showContainer(this.container);
+  };
+
+  private handleHistoryChanged = () => {
+    if (!this.container || this.selection.length === 0) return;
     this.placeEditBar(this.container, this.selection);
     showContainer(this.container);
   };
@@ -211,6 +219,7 @@ export class EditBar extends Plugin implements IPlugin {
       (container.offsetParent as HTMLElement | null) ??
       (document.documentElement as HTMLElement);
     const parentRect = offsetParent.getBoundingClientRect();
+    const viewportHeight = document.documentElement.clientHeight;
     const containerRect = container.getBoundingClientRect();
     const offset = 8;
 
@@ -230,10 +239,15 @@ export class EditBar extends Plugin implements IPlugin {
     let left = anchorTop.x - parentRect.left - containerRect.width / 2;
     left = clamp(left, 0, Math.max(parentRect.width - containerRect.width, 0));
 
-    let top = anchorTop.y - parentRect.top - containerRect.height - offset;
-    if (top < 0) {
-      top = anchorBottom.y - parentRect.top + offset;
-    }
+    // Use viewport space, not container space, to decide whether we have enough room above.
+    const spaceAbove = anchorTop.y - offset;
+    const spaceBelow = viewportHeight - anchorBottom.y - offset;
+    const shouldPlaceAbove =
+      spaceAbove >= containerRect.height || spaceAbove >= spaceBelow;
+
+    let top = shouldPlaceAbove
+      ? anchorTop.y - parentRect.top - containerRect.height - offset
+      : anchorBottom.y - parentRect.top + offset;
     top = clamp(top, 0, Math.max(parentRect.height - containerRect.height, 0));
 
     container.style.left = `${left}px`;
