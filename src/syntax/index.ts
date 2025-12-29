@@ -1,4 +1,5 @@
 import type { InfographicOptions } from '../options';
+import { getTemplate } from '../templates';
 import { mapWithSchema } from './mapper';
 import { parseSyntaxToAst } from './parser';
 import {
@@ -37,6 +38,25 @@ export function parseSyntax(input: string): SyntaxParseResult {
     Object.entries(infographicNode.entries).forEach(([key, value]) => {
       if (!(key in mergedEntries)) mergedEntries[key] = value;
     });
+  }
+
+  if (!infographicNode && !mergedEntries.template) {
+    const entries = Object.entries(ast.entries);
+    const firstLine = entries.reduce((min, [, node]) => {
+      if (node.line < min) return node.line;
+      return min;
+    }, Number.POSITIVE_INFINITY);
+    const firstEntry = entries.find(([, node]) => node.line === firstLine);
+    if (firstEntry && getTemplate(firstEntry[0])) {
+      const [templateKey, templateNode] = firstEntry;
+      templateFromInfographic = templateKey;
+      if (templateNode.kind === 'object') {
+        Object.entries(templateNode.entries).forEach(([key, value]) => {
+          if (!(key in mergedEntries)) mergedEntries[key] = value;
+        });
+      }
+      delete mergedEntries[templateKey];
+    }
   }
 
   const allowedRootKeys = new Set([
